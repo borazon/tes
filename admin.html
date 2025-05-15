@@ -1,0 +1,32 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Page</title>
+</head>
+
+<body>
+    <h2>Verifikasi Approval</h2>
+    <ul id="approvalList"></ul>
+
+    <script>
+        const approvalUrl = "https://docs.google.com/spreadsheets/d/1DJKx251_mz2mAiOqDfbQh1Q4BZeccKyzt8RiXbmNPD0/edit?pli=1&gid=0#gid=0";
+
+        fetch(approvalUrl)
+            .then(res => res.text())
+            .then(text => {
+                const json = JSON.parse(text.substring(47).slice(0, -2));
+                const rows = json.table.rows;
+                const list = document.getElementById("approvalList");
+                rows.forEach(r => {
+                    const item = r.c.map(c => c?.v || "").join(" | ");
+                    const li = document.createElement("li");
+                    li.textContent = item + " [Verifikasi manual di Google Sheet]";
+                    list.appendChild(li);
+                });
+            });
+    </script>
+</body>
+
+</html>

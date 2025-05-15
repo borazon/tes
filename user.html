@@ -1,0 +1,43 @@
+<!-- user.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User Page</title>
+</head>
+
+<body>
+    <h2>Daftar Barang</h2>
+    <ul id="itemList"></ul>
+
+    <h3>Form Approval</h3>
+    <form id="approvalForm">
+        <input type="text" placeholder="Nama" required><br>
+        <input type="text" placeholder="Nama Barang" required><br>
+        <input type="number" placeholder="Harga" required><br>
+        <input type="date" required><br>
+        <input type="text" placeholder="Nama Koordinator" required><br>
+        <button type="submit">Ajukan</button>
+    </form>
+
+    <script>
+        // Hanya tampilkan daftar barang dari sheet Items
+        const itemsUrl = "https://docs.google.com/spreadsheets/d/1DJKx251_mz2mAiOqDfbQh1Q4BZeccKyzt8RiXbmNPD0/edit?pli=1&gid=0#gid=0";
+
+        fetch(itemsUrl)
+            .then(res => res.text())
+            .then(text => {
+                const json = JSON.parse(text.substring(47).slice(0, -2));
+                const rows = json.table.rows;
+                const list = document.getElementById("itemList");
+                rows.forEach(r => {
+                    const item = r.c.map(c => c?.v || "").join(" - ");
+                    const li = document.createElement("li");
+                    li.textContent = item;
+                    list.appendChild(li);
+                });
+            });
+    </script>
+</body>
+
+</html>

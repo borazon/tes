@@ -1,0 +1,44 @@
+<!-- superadmin.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Superadmin Page</title>
+</head>
+
+<body>
+    <h2>Data Barang</h2>
+    <ul id="barangList"></ul>
+
+    <h3>Daftarkan User Baru</h3>
+    <form>
+        <input type="text" placeholder="Username" required><br>
+        <input type="password" placeholder="Password" required><br>
+        <select required>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="superadmin">Superadmin</option>
+        </select><br>
+        <button disabled>Daftar (Hanya bisa via Google Sheet manual)</button>
+    </form>
+
+    <script>
+        const dataUrl = "https://docs.google.com/spreadsheets/d/1DJKx251_mz2mAiOqDfbQh1Q4BZeccKyzt8RiXbmNPD0/edit?pli=1&gid=0#gid=0";
+
+        fetch(dataUrl)
+            .then(res => res.text())
+            .then(text => {
+                const json = JSON.parse(text.substring(47).slice(0, -2));
+                const rows = json.table.rows;
+                const list = document.getElementById("barangList");
+                rows.forEach(r => {
+                    const item = r.c.map(c => c?.v || "").join(" - ");
+                    const li = document.createElement("li");
+                    li.textContent = item;
+                    list.appendChild(li);
+                });
+            });
+    </script>
+</body>
+
+</html>
